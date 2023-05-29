@@ -19,25 +19,21 @@
         let score = 0;
         let wicket = 0;
         let ballWiseres=[];
+        let hit=0;
+        let inputRef= React.createRef();
         // function addOne(){
         //   score+= 1;
         //   rootElement.render(<App/>)
         // }
         function addScore(num) {
-            if (wicket < 10) {
-                ballWiseres.push(num);
-                score += num;
-            }
+            hit=num;
             rootElement.render(<App />)
-            console.log(ballWiseres);
+           
         }
         function addWicket(num) {
-            if (wicket < 10) {
-                ballWiseres.push("w");
-                wicket += num;
-            }
+           hit="w";
             rootElement.render(<App />)
-            console.log(ballWiseres);
+          
         }
 
         const ScoreButtons = () => (
@@ -67,15 +63,38 @@
         )
         function handleSubmit(event){
             event.preventDefault();
+            if(hit=="w"){
+                wicket+=1;
+            }else{
+                score+=hit;
+            }
+
+            ballWiseres.unshift(
+                // <span>{hit}{","}{inputRef.current.value}</span>
+                <span>{ `${hit}, ${inputRef.current.value}`} </span>
+            );
+            hit=0;
+            inputRef.current.value="";
+            console.log(inputRef.current.value)
+            rootElement.render(<App />)
+
         }
         const Form=()=>(
            
             <form onSubmit={handleSubmit}>
-                <input />
-                <input/>
+                <input value={hit} />
+                <input ref={inputRef}/>
                 <button>Submit</button>
                 </form>
-           
+                
+        )
+        const Result2=()=>(
+            <div>
+            {ballWiseres.map((res,index)=>(
+            <p key={index}> {res}</p>
+        
+            ))}
+            </div>
         )
         const App = () => (
             <>
@@ -85,6 +104,7 @@
                 <br/>
                 <Form/>
                 <hr/>
+                <Result2/>
 
 
             </>
